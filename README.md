@@ -26,12 +26,33 @@ python3 -m http.server 8000
 - Data tidak tersinkron otomatis antar perangkat. Untuk pindah perangkat: ekspor di satu perangkat, impor di perangkat lain.
 - File `*.csv` sudah masuk `.gitignore` supaya tidak ikut ter-commit tanpa sengaja.
 
-## Deploy ke Cloudflare Pages (opsional)
+## Deploy gratis ke Cloudflare Pages
 
-1. Push repo ini ke GitHub (private).
-2. Di dashboard Cloudflare: **Workers & Pages → Create → Pages → Connect to Git**, pilih repo ini.
-3. Build command: kosongkan. Output directory: `/` (root).
-4. Karena ini berisi urusan pribadi, pertimbangkan membatasi akses dengan **Cloudflare Access**, supaya hanya emailmu yang bisa membuka situsnya. Data tetap ada di browser, tetapi ini mencegah orang lain memakai atau melihat halamannya.
+Situs ini statis, jadi cukup paket gratis Cloudflare. Tidak perlu build.
+
+1. Login ke [dash.cloudflare.com](https://dash.cloudflare.com) (daftar gratis kalau belum punya akun).
+2. **Workers & Pages → Create application → Pages → Connect to Git**.
+3. Izinkan Cloudflare mengakses GitHub, lalu pilih repo ini saja (*Only select repositories*).
+4. Pengaturan build:
+   - Framework preset: **None**
+   - Build command: *(kosongkan)*
+   - Build output directory: `/` (atau `.`)
+5. Klik **Save and Deploy**. Situs tersedia di `https://<nama-proyek>.pages.dev`. Setiap `git push` ke `main` otomatis memperbarui situs.
+
+File `_headers` sudah disertakan: menambah header keamanan dan `noindex` supaya situs tidak muncul di mesin pencari.
+
+### Kunci akses (disarankan)
+
+Data memang hanya ada di browser, tetapi sebaiknya halaman ini tidak terbuka untuk umum. Pakai **Cloudflare Access** (gratis sampai 50 pengguna):
+
+1. Dashboard → **Zero Trust → Access → Applications → Add an application → Self-hosted**.
+2. Isi domain `<nama-proyek>.pages.dev`.
+3. Buat policy **Allow** dengan aturan *Emails* berisi emailmu saja.
+4. Simpan. Setelah itu halaman meminta kode verifikasi lewat email sebelum bisa dibuka.
+
+### Domain sendiri (opsional)
+
+Domain `.pages.dev` gratis. Kalau mau domain sendiri, tambahkan lewat tab **Custom domains** di proyek Pages. Domain biasanya berbayar.
 
 ## Format CSV
 
