@@ -4,16 +4,86 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#7c3aed">
   <title>Catatan Keuangan</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="top">
-    <h1>Catatan Keuangan</h1>
-    <div class="period">
-      <label for="bulan">Bulan</label>
-      <input type="month" id="bulan">
+  <header class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Uang kamu, aturan kamu</p>
+      <h1>Catatan Keuangan</h1>
+      <p class="sub">Catat pemasukan dan pengeluaran dalam hitungan detik. Pilih sisi Si Hemat, jangan jadi Si Boros!</p>
+      <div class="period">
+        <label for="bulan">Bulan</label>
+        <input type="month" id="bulan">
+      </div>
     </div>
+
+    <svg class="hero-art" viewBox="0 0 520 250" role="img" aria-labelledby="art-title art-desc">
+      <title id="art-title">Si Hemat melawan Si Boros</title>
+      <desc id="art-desc">Ilustrasi dua robot orisinal. Si Hemat berwarna hijau toska dengan koin Rp di dada, Si Boros berwarna oranye dan ungu dengan tas belanja diskon.</desc>
+
+      <circle cx="260" cy="120" r="108" fill="#fff" fill-opacity=".35"/>
+      <circle cx="90" cy="60" r="34" fill="#fde047" fill-opacity=".55"/>
+      <circle cx="450" cy="190" r="40" fill="#f0abfc" fill-opacity=".55"/>
+      <ellipse cx="130" cy="214" rx="64" ry="8" fill="#000" fill-opacity=".12"/>
+      <ellipse cx="390" cy="214" rx="64" ry="8" fill="#000" fill-opacity=".12"/>
+
+      <!-- Si Hemat -->
+      <g class="bob">
+        <line x1="130" y1="40" x2="130" y2="54" stroke="#0f766e" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="130" cy="32" r="10" fill="#fde047" stroke="#ca8a04" stroke-width="3"/>
+        <rect x="92" y="68" width="8" height="18" rx="4" fill="#0d9488"/>
+        <rect x="160" y="68" width="8" height="18" rx="4" fill="#0d9488"/>
+        <rect x="100" y="54" width="60" height="48" rx="16" fill="#2dd4bf"/>
+        <rect x="108" y="66" width="44" height="22" rx="11" fill="#1e1b4b"/>
+        <circle cx="121" cy="77" r="5" fill="#a3e635"/>
+        <circle cx="139" cy="77" r="5" fill="#a3e635"/>
+        <rect x="122" y="102" width="16" height="8" fill="#0f766e"/>
+        <rect x="68" y="114" width="20" height="46" rx="10" fill="#2dd4bf"/>
+        <rect x="172" y="108" width="20" height="46" rx="10" fill="#2dd4bf" transform="rotate(-28 182 112)"/>
+        <rect x="90" y="108" width="80" height="68" rx="18" fill="#14b8a6"/>
+        <circle cx="130" cy="142" r="21" fill="#fde047" stroke="#ca8a04" stroke-width="3"/>
+        <text x="130" y="149" text-anchor="middle" font-size="17" font-weight="800" fill="#854d0e" font-family="system-ui, sans-serif">Rp</text>
+        <rect x="100" y="176" width="24" height="24" rx="8" fill="#0f766e"/>
+        <rect x="136" y="176" width="24" height="24" rx="8" fill="#0f766e"/>
+        <rect x="94" y="198" width="36" height="12" rx="6" fill="#115e59"/>
+        <rect x="130" y="198" width="36" height="12" rx="6" fill="#115e59"/>
+      </g>
+
+      <!-- Si Boros -->
+      <g class="bob bob-b">
+        <polygon points="360,58 352,30 378,52" fill="#d946ef"/>
+        <polygon points="420,58 428,30 402,52" fill="#d946ef"/>
+        <polygon points="358,58 422,58 428,94 390,106 352,94" fill="#fb923c"/>
+        <polygon points="364,70 416,70 412,86 368,86" fill="#1e1b4b"/>
+        <polygon points="371,73 387,76 385,82 373,81" fill="#fde047"/>
+        <polygon points="409,73 393,76 395,82 407,81" fill="#fde047"/>
+        <rect x="382" y="104" width="16" height="8" fill="#9a3412"/>
+        <rect x="320" y="110" width="20" height="46" rx="10" fill="#fb923c" transform="rotate(28 330 114)"/>
+        <rect x="432" y="116" width="20" height="46" rx="10" fill="#fb923c"/>
+        <polygon points="346,112 434,112 424,178 356,178" fill="#f97316"/>
+        <polygon points="338,108 364,108 360,130 336,126" fill="#d946ef"/>
+        <polygon points="442,108 416,108 420,130 444,126" fill="#d946ef"/>
+        <path d="M381 130 q0 -14 9 -14 q9 0 9 14" fill="none" stroke="#854d0e" stroke-width="3" stroke-linecap="round"/>
+        <rect x="370" y="130" width="40" height="36" rx="5" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+        <text x="390" y="156" text-anchor="middle" font-size="22" font-weight="800" fill="#be123c" font-family="system-ui, sans-serif">%</text>
+        <rect x="362" y="178" width="24" height="22" fill="#9a3412"/>
+        <rect x="394" y="178" width="24" height="22" fill="#9a3412"/>
+        <rect x="356" y="198" width="36" height="12" rx="3" fill="#7c2d12"/>
+        <rect x="388" y="198" width="36" height="12" rx="3" fill="#7c2d12"/>
+      </g>
+
+      <!-- VS -->
+      <polygon points="260,62 270,84 294,80 282,100 302,116 278,122 280,148 260,134 240,148 242,122 218,116 238,100 226,80 250,84" fill="#fde047" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round"/>
+      <text x="260" y="116" text-anchor="middle" font-size="26" font-weight="900" fill="#7c2d12" font-family="system-ui, sans-serif">VS</text>
+
+      <rect x="76" y="219" width="108" height="26" rx="13" fill="#fff"/>
+      <text x="130" y="237" text-anchor="middle" font-size="15" font-weight="800" fill="#115e59" font-family="system-ui, sans-serif">Si Hemat</text>
+      <rect x="336" y="219" width="108" height="26" rx="13" fill="#fff"/>
+      <text x="390" y="237" text-anchor="middle" font-size="15" font-weight="800" fill="#9a3412" font-family="system-ui, sans-serif">Si Boros</text>
+    </svg>
   </header>
 
   <main>
@@ -23,24 +93,45 @@
       <div class="card bal"><span>Saldo bulan ini</span><strong id="sumBal">Rp 0</strong></div>
     </section>
 
-    <section class="panel">
-      <h2>Tambah transaksi</h2>
-      <form id="form" autocomplete="off">
-        <div class="row">
-          <label>Tanggal<input type="date" id="tanggal" required></label>
-          <label>Jenis
-            <select id="jenis">
-              <option value="keluar">Pengeluaran</option>
-              <option value="masuk">Pemasukan</option>
-            </select>
-          </label>
-          <label>Kategori
-            <select id="kategori"></select>
-          </label>
-          <label>Jumlah (Rp)<input type="number" id="jumlah" min="1" step="1" inputmode="numeric" placeholder="50000" required></label>
+    <section class="panel" aria-labelledby="h-tambah">
+      <h2 id="h-tambah">Tambah transaksi</h2>
+      <form id="form" autocomplete="off" novalidate>
+        <div class="seg" role="radiogroup" aria-label="Jenis transaksi">
+          <button type="button" class="seg-btn out active" role="radio" aria-checked="true" data-jenis="keluar">Pengeluaran</button>
+          <button type="button" class="seg-btn in" role="radio" aria-checked="false" data-jenis="masuk">Pemasukan</button>
         </div>
-        <label>Catatan (opsional)<input type="text" id="catatan" maxlength="120" placeholder="mis. makan siang"></label>
-        <button type="submit" class="primary">Simpan</button>
+
+        <div class="field">
+          <label for="jumlah" class="lbl">Jumlah</label>
+          <div class="amount-box">
+            <b>Rp</b>
+            <input type="text" id="jumlah" inputmode="numeric" placeholder="0" maxlength="14" aria-describedby="jumlah-err">
+          </div>
+          <div class="quick" id="quick" aria-label="Nominal cepat"></div>
+          <p id="jumlah-err" class="err" role="alert" hidden></p>
+        </div>
+
+        <div class="field">
+          <span class="lbl" id="lbl-kat">Kategori</span>
+          <div class="chips" id="kategori" role="group" aria-labelledby="lbl-kat"></div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="tanggal" class="lbl">Tanggal</label>
+            <input type="date" id="tanggal" required>
+            <div class="quick small">
+              <button type="button" class="chip" id="btnHariIni">Hari ini</button>
+              <button type="button" class="chip" id="btnKemarin">Kemarin</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="catatan" class="lbl">Catatan (opsional)</label>
+            <input type="text" id="catatan" maxlength="120" placeholder="mis. makan siang">
+          </div>
+        </div>
+
+        <button type="submit" class="primary big" id="btnSimpan">Simpan pengeluaran</button>
       </form>
     </section>
 
@@ -54,7 +145,7 @@
       <div class="tablewrap">
         <table>
           <thead>
-            <tr><th>Tanggal</th><th>Kategori</th><th>Catatan</th><th class="num">Jumlah</th><th></th></tr>
+            <tr><th>Tanggal</th><th>Kategori</th><th>Catatan</th><th class="num">Jumlah</th><th><span class="sr">Aksi</span></th></tr>
           </thead>
           <tbody id="rows"></tbody>
         </table>

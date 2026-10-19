@@ -1,6 +1,7 @@
 "use strict";
 const assert = require("assert");
 const {
+  parseAngka, formatAngka, tanggalLokal, ikon, KATEGORI,
   formatRupiah, filterBulan, ringkas, perKategori, keCSV, parseCSV, dariCSV, tanggalValid,
 } = require("../app.js");
 
@@ -54,5 +55,23 @@ assert.throws(() => dariCSV("a,b,c\n1,2,3", () => "z"));
 // Parser: CRLF, BOM, newline dalam tanda kutip
 const p = parseCSV("﻿a,b\r\n\"x\ny\",2\r\n");
 assert.deepStrictEqual(p, [["a", "b"], ["x\ny", "2"]]);
+
+
+// Input rupiah berformat
+assert.strictEqual(parseAngka("1.250.000"), 1250000);
+assert.strictEqual(parseAngka("Rp 50.000,-"), 50000);
+assert.strictEqual(parseAngka(""), 0);
+assert.strictEqual(parseAngka("abc"), 0);
+assert.strictEqual(parseAngka("99999999999999999"), 999999999999);
+assert.strictEqual(formatAngka(1250000), "1.250.000");
+assert.strictEqual(parseAngka(formatAngka(35000)), 35000);
+
+// Tanggal lokal (bukan UTC)
+assert.strictEqual(tanggalLokal(new Date(2026, 9, 1, 0, 30)), "2026-10-01");
+assert.strictEqual(tanggalLokal(new Date(2026, 0, 5, 23, 59)), "2026-01-05");
+
+// Semua kategori punya ikon sendiri
+for (const k of [...KATEGORI.keluar, ...KATEGORI.masuk]) assert.notStrictEqual(ikon(k), "💰", k);
+assert.strictEqual(ikon("tidak ada"), "💰");
 
 console.log("Semua tes lulus");

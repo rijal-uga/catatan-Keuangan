@@ -122,6 +122,33 @@ function dariCSV(text, idGen) {
   return { items, dilewati };
 }
 
+const IKON = {
+  "Makan & minum": "🍜", "Transportasi": "🚌", "Belanja": "🛍️", "Tagihan": "🧾",
+  "Kesehatan": "💊", "Hiburan": "🎮", "Pendidikan": "📚", "Lainnya": "✨",
+  "Gaji": "💼", "Bonus": "🎁", "Usaha": "🏪",
+};
+
+function ikon(nama) {
+  return IKON[nama] || "💰";
+}
+
+const MAKS_JUMLAH = 999999999999;
+
+function parseAngka(s) {
+  const digits = String(s || "").replace(/\D/g, "");
+  if (!digits) return 0;
+  return Math.min(Number(digits), MAKS_JUMLAH);
+}
+
+function formatAngka(n) {
+  return Math.round(n).toLocaleString("id-ID");
+}
+
+function tanggalLokal(d) {
+  const p = (n) => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+}
+
 function hariIni() {
   const d = new Date();
   const p = (n) => String(n).padStart(2, "0");
@@ -134,7 +161,7 @@ function buatId() {
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { formatRupiah, filterBulan, ringkas, perKategori, keCSV, parseCSV, dariCSV, tanggalValid, hariIni };
+  module.exports = { formatRupiah, filterBulan, ringkas, perKategori, keCSV, parseCSV, dariCSV, tanggalValid, hariIni, parseAngka, formatAngka, tanggalLokal, ikon, KATEGORI, IKON };
 }
 
 /* ---------- Antarmuka (hanya jalan di browser) ---------- */
@@ -142,12 +169,16 @@ if (typeof module !== "undefined") {
 if (typeof document !== "undefined") {
   const KEY = "catatan-keuangan:v1";
   const $ = (id) => document.getElementById(id);
+  const NOMINAL_CEPAT = [10000, 20000, 50000, 100000, 250000];
+
+  let jenis = "keluar";
+  let kategori = KATEGORI.keluar[0];
 
   function muat() {
     try {
       const raw = localStorage.getItem(KEY);
-      const data = raw ? JSON.parse(raw) : [];
-      return Array.isArray(data) ? data : [];
+      const d = raw ? JSON.parse(raw) : [];
+      return Array.isArray(d) ? d : [];
     } catch (e) {
       return [];
     }
@@ -164,17 +195,110 @@ if (typeof document !== "undefined") {
 
   function pesan(t) { $("msg").textContent = t; }
 
+  function tampilkanError(t) {
+    const el = $("jumlah-err");
+    el.textContent = t;
+    el.hidden = !t;
+  }
+
+  /* --- Form --- */
   function isiKategori() {
-    const sel = $("kategori");
-    sel.textContent = "";
-    for (const k of KATEGORI[$("jenis").value]) {
-      const o = document.createElement("option");
-      o.value = k;
-      o.textContent = k;
-      sel.appendChild(o);
+    const wrap = $("kategori");
+    wrap.textContent = "";
+    if (!KATEGORI[jenis].includes(kategori)) kategori = KATEGORI[jenis][0];
+    for (const k of KATEGORI[jenis]) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.textContent = ikon(k) + " " + k;
+      b.setAttribute("aria-pressed", String(k === kategori));
+      b.addEventListener("click", () => {
+        kategori = k;
+        for (const x of wrap.children) x.setAttribute("aria-pressed", String(x === b));
+      });
+      wrap.appendChild(b);
     }
   }
 
+  function setJenis(j) {
+    jenis = j;
+    for (const b of document.querySelectorAll(".seg-btn")) {
+      const aktif = b.dataset.jenis === j;
+      b.classList.toggle("active", aktif);
+      b.setAttribute("aria-checked", String(aktif));
+    }
+    const btn = $("btnSimpan");
+    btn.textContent = j === "masuk" ? "Simpan pemasukan" : "Simpan pengeluaran";
+    btn.classList.toggle("masuk", j === "masuk");
+    isiKategori();
+  }
+
+  function isiNominalCepat() {
+    const q = $("quick");
+    for (const n of NOMINAL_CEPAT) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.textContent = "+" + formatAngka(n);
+      b.setAttribute("aria-label", "Tambah " + formatRupiah(n));
+      b.addEventListener("click", () => {
+        const sekarang = parseAngka($("jumlah").value);
+        $("jumlah").value = formatAngka(Math.min(sekarang + n, MAKS_JUMLAH));
+        tampilkanError("");
+      });
+      q.appendChild(b);
+    }
+  }
+
+  function geserHari(d) {
+    const t = new Date();
+    t.setDate(t.getDate() + d);
+    $("tanggal").value = tanggalLokal(t);
+  }
+
+  $("jumlah").addEventListener("input", (e) => {
+    const n = Math.min(parseAngka(e.target.value), MAKS_JUMLAH);
+    e.target.value = n ? formatAngka(n) : "";
+    tampilkanError("");
+  });
+  for (const b of document.querySelectorAll(".seg-btn")) {
+    b.addEventListener("click", () => setJenis(b.dataset.jenis));
+  }
+  $("btnHariIni").addEventListener("click", () => geserHari(0));
+  $("btnKemarin").addEventListener("click", () => geserHari(-1));
+
+  $("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const jumlah = parseAngka($("jumlah").value);
+    if (!(jumlah > 0)) {
+      tampilkanError("Isi jumlah lebih dari 0.");
+      $("jumlah").focus();
+      return;
+    }
+    if (!tanggalValid($("tanggal").value)) {
+      tampilkanError("Pilih tanggal yang valid.");
+      $("tanggal").focus();
+      return;
+    }
+    data.push({
+      id: buatId(),
+      tanggal: $("tanggal").value,
+      jenis,
+      kategori,
+      jumlah,
+      catatan: $("catatan").value.trim().slice(0, 120),
+    });
+    simpan();
+    $("bulan").value = $("tanggal").value.slice(0, 7);
+    $("jumlah").value = "";
+    $("catatan").value = "";
+    tampilkanError("");
+    $("jumlah").focus();
+    pesan("Tersimpan.");
+    render();
+  });
+
+  /* --- Tampilan data --- */
   function render() {
     const bulan = $("bulan").value;
     const list = filterBulan(data, bulan);
@@ -189,7 +313,7 @@ if (typeof document !== "undefined") {
     if (!kat.length) {
       const p = document.createElement("p");
       p.className = "muted";
-      p.textContent = "Belum ada pengeluaran.";
+      p.textContent = "Belum ada pengeluaran bulan ini.";
       bd.appendChild(p);
     }
     for (const [nama, jml] of kat) {
@@ -198,7 +322,7 @@ if (typeof document !== "undefined") {
       const head = document.createElement("div");
       head.className = "bar-head";
       const a = document.createElement("span");
-      a.textContent = nama;
+      a.textContent = ikon(nama) + " " + nama;
       const b = document.createElement("span");
       b.textContent = formatRupiah(jml) + " (" + Math.round((jml / r.keluar) * 100) + "%)";
       head.append(a, b);
@@ -217,7 +341,7 @@ if (typeof document !== "undefined") {
     $("empty").hidden = list.length > 0;
     for (const t of list) {
       const tr = document.createElement("tr");
-      const cells = [t.tanggal, t.kategori, t.catatan];
+      const cells = [t.tanggal, ikon(t.kategori) + " " + t.kategori, t.catatan];
       for (const c of cells) {
         const td = document.createElement("td");
         td.textContent = c;
@@ -244,30 +368,9 @@ if (typeof document !== "undefined") {
     }
   }
 
-  $("jenis").addEventListener("change", isiKategori);
   $("bulan").addEventListener("change", render);
 
-  $("form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const jumlah = Math.round(Number($("jumlah").value));
-    if (!tanggalValid($("tanggal").value) || !(jumlah > 0)) return;
-    data.push({
-      id: buatId(),
-      tanggal: $("tanggal").value,
-      jenis: $("jenis").value,
-      kategori: $("kategori").value,
-      jumlah,
-      catatan: $("catatan").value.trim().slice(0, 120),
-    });
-    simpan();
-    $("bulan").value = $("tanggal").value.slice(0, 7);
-    $("jumlah").value = "";
-    $("catatan").value = "";
-    $("jumlah").focus();
-    pesan("");
-    render();
-  });
-
+  /* --- Data: ekspor / impor / hapus --- */
   $("btnExport").addEventListener("click", () => {
     const blob = new Blob(["﻿" + keCSV(data)], { type: "text/csv;charset=utf-8" });
     const a = document.createElement("a");
@@ -305,8 +408,10 @@ if (typeof document !== "undefined") {
     }
   });
 
+  /* --- Mulai --- */
   $("tanggal").value = hariIni();
   $("bulan").value = hariIni().slice(0, 7);
-  isiKategori();
+  isiNominalCepat();
+  setJenis("keluar");
   render();
 }
