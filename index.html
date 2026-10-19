@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Catatan Keuangan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Catatan Keuangan</h1>
+    <div class="period">
+      <label for="bulan">Bulan</label>
+      <input type="month" id="bulan">
+    </div>
+  </header>
+
+  <main>
+    <section class="cards" aria-label="Ringkasan bulan ini">
+      <div class="card in"><span>Pemasukan</span><strong id="sumIn">Rp 0</strong></div>
+      <div class="card out"><span>Pengeluaran</span><strong id="sumOut">Rp 0</strong></div>
+      <div class="card bal"><span>Saldo bulan ini</span><strong id="sumBal">Rp 0</strong></div>
+    </section>
+
+    <section class="panel">
+      <h2>Tambah transaksi</h2>
+      <form id="form" autocomplete="off">
+        <div class="row">
+          <label>Tanggal<input type="date" id="tanggal" required></label>
+          <label>Jenis
+            <select id="jenis">
+              <option value="keluar">Pengeluaran</option>
+              <option value="masuk">Pemasukan</option>
+            </select>
+          </label>
+          <label>Kategori
+            <select id="kategori"></select>
+          </label>
+          <label>Jumlah (Rp)<input type="number" id="jumlah" min="1" step="1" inputmode="numeric" placeholder="50000" required></label>
+        </div>
+        <label>Catatan (opsional)<input type="text" id="catatan" maxlength="120" placeholder="mis. makan siang"></label>
+        <button type="submit" class="primary">Simpan</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Pengeluaran per kategori</h2>
+      <div id="breakdown" class="breakdown"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Transaksi</h2>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>Tanggal</th><th>Kategori</th><th>Catatan</th><th class="num">Jumlah</th><th></th></tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p id="empty" class="muted" hidden>Belum ada transaksi di bulan ini.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Data</h2>
+      <p class="muted">Data tersimpan hanya di browser perangkat ini. Ekspor CSV secara berkala sebagai cadangan.</p>
+      <div class="actions">
+        <button type="button" id="btnExport">Ekspor CSV</button>
+        <label class="btn">Impor CSV<input type="file" id="fileImport" accept=".csv,text/csv" hidden></label>
+        <button type="button" id="btnClear" class="danger">Hapus semua data</button>
+      </div>
+      <p id="msg" class="muted" role="status"></p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

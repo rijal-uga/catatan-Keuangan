@@ -1,0 +1,6 @@
+# Data keuangan pribadi jangan ikut ter-commit
+*.csv
+*.xlsx
+.env
+.DS_Store
+node_modules/
