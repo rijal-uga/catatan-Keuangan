@@ -1,0 +1,11 @@
+wrangler.jsonc
+.assetsignore
+.gitignore
+README.md
+tests
+node_modules
+.git
+.DS_Store
+*.csv
+*.xlsx
+.env
